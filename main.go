@@ -5,6 +5,7 @@ import (
 	"golang/routes"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func setupMain() *echo.Echo {
@@ -13,6 +14,7 @@ func setupMain() *echo.Echo {
 	routes.MahasiswaRouter(e)
 	routes.DosenRouter(e)
 	routes.PermohonanRouter(e)
+	e.Use(middleware.CORS())
 	return e
 }
 
