@@ -29,14 +29,14 @@ func GetOneDsn(c echo.Context) error {
 	err := dsnCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&dsn)
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.DosenResponse{
+		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 			Status:  http.StatusInternalServerError,
 			Message: "Error",
 			Data:    &echo.Map{"data": err.Error()},
 		})
 	}
 
-	return c.JSON(http.StatusOK, responses.DosenResponse{
+	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
 		Data:    &echo.Map{"data": dsn},
@@ -51,7 +51,7 @@ func GetAllDsn(c echo.Context) error {
 	results, err := dsnCollection.Find(ctx, bson.M{})
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.DosenResponse{
+		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 			Status:  http.StatusInternalServerError,
 			Message: "Error",
 			Data:    &echo.Map{"data": err.Error()},
@@ -62,7 +62,7 @@ func GetAllDsn(c echo.Context) error {
 	for results.Next(ctx) {
 		var dsn models.Dosen
 		if err := results.Decode(&dsn); err != nil {
-			return c.JSON(http.StatusInternalServerError, responses.DosenResponse{
+			return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 				Status:  http.StatusInternalServerError,
 				Message: "Error",
 				Data:    &echo.Map{"data": err.Error()},
@@ -71,7 +71,7 @@ func GetAllDsn(c echo.Context) error {
 		allDsn = append(allDsn, dsn)
 	}
 
-	return c.JSON(http.StatusOK, responses.DosenResponse{
+	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
 		Data:    &echo.Map{"data": allDsn},
@@ -87,7 +87,7 @@ func EditADsn(c echo.Context) error {
 	objId, _ := primitive.ObjectIDFromHex(id)
 
 	if err := c.Bind(&dsn); err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.DosenResponse{
+		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 			Status:  http.StatusInternalServerError,
 			Message: "Error",
 			Data:    &echo.Map{"data": err.Error()},
@@ -95,7 +95,7 @@ func EditADsn(c echo.Context) error {
 	}
 
 	if validationErr := validate.Struct(&dsn); validationErr != nil {
-		return c.JSON(http.StatusBadRequest, responses.DosenResponse{
+		return c.JSON(http.StatusBadRequest, responses.DefaultResponse{
 			Status:  http.StatusBadRequest,
 			Message: "Error",
 			Data:    &echo.Map{"data": validationErr.Error()},
@@ -112,7 +112,7 @@ func EditADsn(c echo.Context) error {
 	result, err := dsnCollection.UpdateOne(ctx, bson.M{"_id": objId}, bson.M{"$set": update})
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.DosenResponse{
+		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 			Status:  http.StatusInternalServerError,
 			Message: "Error",
 			Data:    &echo.Map{"data": err.Error()},
@@ -123,7 +123,7 @@ func EditADsn(c echo.Context) error {
 	if result.MatchedCount == 1 {
 		err := dsnCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&updatedDsn)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, responses.DosenResponse{
+			return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 				Status:  http.StatusInternalServerError,
 				Message: "Error",
 				Data:    &echo.Map{"data": err.Error()},
@@ -131,7 +131,7 @@ func EditADsn(c echo.Context) error {
 		}
 	}
 
-	return c.JSON(http.StatusOK, responses.DosenResponse{
+	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
 		Data:    &echo.Map{"data": updatedDsn},
@@ -144,7 +144,7 @@ func CreateDsn(c echo.Context) error {
 	defer cancel()
 
 	if err := c.Bind(&dsn); err != nil {
-		return c.JSON(http.StatusBadRequest, responses.DosenResponse{
+		return c.JSON(http.StatusBadRequest, responses.DefaultResponse{
 			Status:  http.StatusBadRequest,
 			Message: "Error",
 			Data:    &echo.Map{"data": err.Error()},
@@ -162,14 +162,14 @@ func CreateDsn(c echo.Context) error {
 	result, err := dsnCollection.InsertOne(ctx, newDsn)
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.DosenResponse{
+		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 			Status:  http.StatusInternalServerError,
 			Message: "Error",
 			Data:    &echo.Map{"data": err.Error()},
 		})
 	}
 
-	return c.JSON(http.StatusCreated, responses.DosenResponse{
+	return c.JSON(http.StatusCreated, responses.DefaultResponse{
 		Status:  http.StatusCreated,
 		Message: "Success",
 		Data:    &echo.Map{"data": result},
@@ -186,7 +186,7 @@ func DeleteDsn(c echo.Context) error {
 	result, err := dsnCollection.DeleteOne(ctx, bson.M{"_id": objId})
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.DosenResponse{
+		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 			Status:  http.StatusInternalServerError,
 			Message: "Error",
 			Data:    &echo.Map{"data": err.Error()},
@@ -194,14 +194,14 @@ func DeleteDsn(c echo.Context) error {
 	}
 
 	if result.DeletedCount < 1 {
-		return c.JSON(http.StatusNotFound, responses.DosenResponse{
+		return c.JSON(http.StatusNotFound, responses.DefaultResponse{
 			Status:  http.StatusNotFound,
 			Message: "Error",
 			Data:    &echo.Map{"data": "Dosen with specified ID not found"},
 		})
 	}
 
-	return c.JSON(http.StatusOK, responses.DosenResponse{
+	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
 		Data:    &echo.Map{"data": "Dosen with specified ID successfully deleted"},

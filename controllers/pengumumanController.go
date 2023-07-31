@@ -14,17 +14,19 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var pmhCollection *mongo.Collection = configs.GetCollection(configs.DB, "permohonan")
+var pngCollection *mongo.Collection = configs.GetCollection(configs.DB, "pengumuman")
 
-func GetOnePmh(c echo.Context) error {
+// var validate = validator.New()
+
+func GetOnePng(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	id := c.Param("id")
-	var pmh models.Permohonan
+	var png models.Pengumuman
 	defer cancel()
 
 	objId, _ := primitive.ObjectIDFromHex(id)
 
-	err := pmhCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&pmh)
+	err := pngCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&png)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
@@ -37,16 +39,16 @@ func GetOnePmh(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
-		Data:    &echo.Map{"data": pmh},
+		Data:    &echo.Map{"data": png},
 	})
 }
 
-func GetAllPmh(c echo.Context) error {
+func GetAllPng(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	var allPmh []models.Permohonan
+	var allPng []models.Pengumuman
 	defer cancel()
 
-	results, err := pmhCollection.Find(ctx, bson.M{})
+	results, err := pngCollection.Find(ctx, bson.M{})
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
@@ -58,33 +60,33 @@ func GetAllPmh(c echo.Context) error {
 
 	defer results.Close(ctx)
 	for results.Next(ctx) {
-		var pmh models.Permohonan
-		if err := results.Decode(&pmh); err != nil {
+		var png models.Pengumuman
+		if err := results.Decode(&png); err != nil {
 			return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 				Status:  http.StatusInternalServerError,
 				Message: "Error",
 				Data:    &echo.Map{"data": err.Error()},
 			})
 		}
-		allPmh = append(allPmh, pmh)
+		allPng = append(allPng, png)
 	}
 
 	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
-		Data:    &echo.Map{"data": allPmh},
+		Data:    &echo.Map{"data": allPng},
 	})
 }
 
-func EditAPmh(c echo.Context) error {
+func EditAPng(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	id := c.Param("id")
-	var pmh models.Permohonan
+	var png models.Pengumuman
 	defer cancel()
 
 	objId, _ := primitive.ObjectIDFromHex(id)
 
-	if err := c.Bind(&pmh); err != nil {
+	if err := c.Bind(&png); err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 			Status:  http.StatusInternalServerError,
 			Message: "Error",
@@ -92,7 +94,7 @@ func EditAPmh(c echo.Context) error {
 		})
 	}
 
-	if validationErr := validate.Struct(&pmh); validationErr != nil {
+	if validationErr := validate.Struct(&png); validationErr != nil {
 		return c.JSON(http.StatusBadRequest, responses.DefaultResponse{
 			Status:  http.StatusBadRequest,
 			Message: "Error",
@@ -101,21 +103,18 @@ func EditAPmh(c echo.Context) error {
 	}
 
 	update := bson.M{
-		"jenis":  pmh.Jenis,
-		"status": pmh.Status,
-		"pemohon": bson.M{
-			"nama":           pmh.Pemohon.Nama,
-			"nomor_pengenal": pmh.Pemohon.Nomor_Pengenal,
+		"jenis": png.Jenis,
+		"announcer": bson.M{
+			"nama":           png.Announcer.Nama,
+			"nomor_pengenal": png.Announcer.Nomor_Pengenal,
 		},
-		"tujuan": pmh.Tujuan,
-		"berkas": bson.M{
-			"nama_berkas": pmh.Berkas.NamaBerkas,
-			"url_berkas":  pmh.Berkas.URLBerkas,
+		"content": bson.M{
+			"tgl":  png.Content.Tgl,
+			"data": png.Content.Data,
 		},
-		"tgl_masuk": pmh.TglMasuk,
 	}
 
-	result, err := pmhCollection.UpdateOne(ctx, bson.M{"_id": objId}, bson.M{"$set": update})
+	result, err := pngCollection.UpdateOne(ctx, bson.M{"_id": objId}, bson.M{"$set": update})
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
@@ -125,9 +124,9 @@ func EditAPmh(c echo.Context) error {
 		})
 	}
 
-	var updatedPmh models.Permohonan
+	var updatedPng models.Pengumuman
 	if result.MatchedCount == 1 {
-		err := pmhCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&updatedPmh)
+		err := pngCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&updatedPng)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 				Status:  http.StatusInternalServerError,
@@ -140,16 +139,16 @@ func EditAPmh(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
-		Data:    &echo.Map{"data": updatedPmh},
+		Data:    &echo.Map{"data": updatedPng},
 	})
 }
 
-func CreatePmh(c echo.Context) error {
+func CreatePng(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	var pmh models.Permohonan
+	var png models.Pengumuman
 	defer cancel()
 
-	if err := c.Bind(&pmh); err != nil {
+	if err := c.Bind(&png); err != nil {
 		return c.JSON(http.StatusBadRequest, responses.DefaultResponse{
 			Status:  http.StatusBadRequest,
 			Message: "Error",
@@ -157,23 +156,20 @@ func CreatePmh(c echo.Context) error {
 		})
 	}
 
-	newPmh := models.Permohonan{
-		Id:     primitive.NewObjectID(),
-		Jenis:  pmh.Jenis,
-		Status: pmh.Status,
-		Pemohon: models.Pemohon{
-			Nama:           pmh.Pemohon.Nama,
-			Nomor_Pengenal: pmh.Pemohon.Nomor_Pengenal,
+	newPng := models.Pengumuman{
+		Id:    primitive.NewObjectID(),
+		Jenis: png.Jenis,
+		Announcer: models.Announcer{
+			Nama:           png.Announcer.Nama,
+			Nomor_Pengenal: png.Announcer.Nomor_Pengenal,
 		},
-		Tujuan: pmh.Tujuan,
-		Berkas: models.Berkas{
-			NamaBerkas: pmh.Berkas.NamaBerkas,
-			URLBerkas:  pmh.Berkas.URLBerkas,
+		Content: models.Content{
+			Tgl:  png.Content.Tgl,
+			Data: png.Content.Data,
 		},
-		TglMasuk: pmh.TglMasuk,
 	}
 
-	result, err := pmhCollection.InsertOne(ctx, newPmh)
+	result, err := pngCollection.InsertOne(ctx, newPng)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
@@ -190,14 +186,14 @@ func CreatePmh(c echo.Context) error {
 	})
 }
 
-func DeletePmh(c echo.Context) error {
+func DeletePng(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	id := c.Param("id")
 	defer cancel()
 
 	objId, _ := primitive.ObjectIDFromHex(id)
 
-	result, err := pmhCollection.DeleteOne(ctx, bson.M{"_id": objId})
+	result, err := pngCollection.DeleteOne(ctx, bson.M{"_id": objId})
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
@@ -211,13 +207,13 @@ func DeletePmh(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, responses.DefaultResponse{
 			Status:  http.StatusNotFound,
 			Message: "Error",
-			Data:    &echo.Map{"data": "Permohonan with specified ID not found"},
+			Data:    &echo.Map{"data": "Pengumuman with specified ID not found"},
 		})
 	}
 
 	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
-		Data:    &echo.Map{"data": "Permohonan with specified ID successfully deleted"},
+		Data:    &echo.Map{"data": "Pengumuman with specified ID successfully deleted"},
 	})
 }

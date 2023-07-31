@@ -15,6 +15,7 @@ func setupMain() *echo.Echo {
 	routes.MahasiswaRouter(e)
 	routes.DosenRouter(e)
 	routes.PermohonanRouter(e)
+	routes.PengumumanRouter(e)
 	return e
 }
 

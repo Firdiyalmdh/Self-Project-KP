@@ -29,14 +29,14 @@ func GetOneMhs(c echo.Context) error {
 	err := mhsCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&mhs)
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.MahasiswaResponse{
+		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 			Status:  http.StatusInternalServerError,
 			Message: "Error",
 			Data:    &echo.Map{"data": err.Error()},
 		})
 	}
 
-	return c.JSON(http.StatusOK, responses.MahasiswaResponse{
+	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
 		Data:    &echo.Map{"data": mhs},
@@ -51,7 +51,7 @@ func GetAllMhs(c echo.Context) error {
 	results, err := mhsCollection.Find(ctx, bson.M{})
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.MahasiswaResponse{
+		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 			Status:  http.StatusInternalServerError,
 			Message: "Error",
 			Data:    &echo.Map{"data": err.Error()},
@@ -62,7 +62,7 @@ func GetAllMhs(c echo.Context) error {
 	for results.Next(ctx) {
 		var mhs models.Mahasiswa
 		if err := results.Decode(&mhs); err != nil {
-			return c.JSON(http.StatusInternalServerError, responses.MahasiswaResponse{
+			return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 				Status:  http.StatusInternalServerError,
 				Message: "Error",
 				Data:    &echo.Map{"data": err.Error()},
@@ -71,7 +71,7 @@ func GetAllMhs(c echo.Context) error {
 		allMhs = append(allMhs, mhs)
 	}
 
-	return c.JSON(http.StatusOK, responses.MahasiswaResponse{
+	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
 		Data:    &echo.Map{"data": allMhs},
@@ -87,7 +87,7 @@ func EditAMhs(c echo.Context) error {
 	objId, _ := primitive.ObjectIDFromHex(id)
 
 	if err := c.Bind(&mhs); err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.MahasiswaResponse{
+		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 			Status:  http.StatusInternalServerError,
 			Message: "Error",
 			Data:    &echo.Map{"data": err.Error()},
@@ -95,7 +95,7 @@ func EditAMhs(c echo.Context) error {
 	}
 
 	if validationErr := validate.Struct(&mhs); validationErr != nil {
-		return c.JSON(http.StatusBadRequest, responses.MahasiswaResponse{
+		return c.JSON(http.StatusBadRequest, responses.DefaultResponse{
 			Status:  http.StatusBadRequest,
 			Message: "Error",
 			Data:    &echo.Map{"data": validationErr.Error()},
@@ -113,7 +113,7 @@ func EditAMhs(c echo.Context) error {
 	result, err := mhsCollection.UpdateOne(ctx, bson.M{"_id": objId}, bson.M{"$set": update})
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.MahasiswaResponse{
+		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 			Status:  http.StatusInternalServerError,
 			Message: "Error",
 			Data:    &echo.Map{"data": err.Error()},
@@ -124,7 +124,7 @@ func EditAMhs(c echo.Context) error {
 	if result.MatchedCount == 1 {
 		err := mhsCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&updatedMhs)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, responses.MahasiswaResponse{
+			return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 				Status:  http.StatusInternalServerError,
 				Message: "Error",
 				Data:    &echo.Map{"data": err.Error()},
@@ -132,7 +132,7 @@ func EditAMhs(c echo.Context) error {
 		}
 	}
 
-	return c.JSON(http.StatusOK, responses.MahasiswaResponse{
+	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
 		Data:    &echo.Map{"data": updatedMhs},
@@ -145,7 +145,7 @@ func CreateMhs(c echo.Context) error {
 	defer cancel()
 
 	if err := c.Bind(&mhs); err != nil {
-		return c.JSON(http.StatusBadRequest, responses.MahasiswaResponse{
+		return c.JSON(http.StatusBadRequest, responses.DefaultResponse{
 			Status:  http.StatusBadRequest,
 			Message: "Error",
 			Data:    &echo.Map{"data": err.Error()},
@@ -164,14 +164,14 @@ func CreateMhs(c echo.Context) error {
 	result, err := mhsCollection.InsertOne(ctx, newMhs)
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.MahasiswaResponse{
+		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 			Status:  http.StatusInternalServerError,
 			Message: "Error",
 			Data:    &echo.Map{"data": err.Error()},
 		})
 	}
 
-	return c.JSON(http.StatusCreated, responses.MahasiswaResponse{
+	return c.JSON(http.StatusCreated, responses.DefaultResponse{
 		Status:  http.StatusCreated,
 		Message: "Success",
 		Data:    &echo.Map{"data": result},
@@ -188,7 +188,7 @@ func DeleteMhs(c echo.Context) error {
 	result, err := mhsCollection.DeleteOne(ctx, bson.M{"_id": objId})
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.MahasiswaResponse{
+		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 			Status:  http.StatusInternalServerError,
 			Message: "Error",
 			Data:    &echo.Map{"data": err.Error()},
@@ -196,14 +196,14 @@ func DeleteMhs(c echo.Context) error {
 	}
 
 	if result.DeletedCount < 1 {
-		return c.JSON(http.StatusNotFound, responses.MahasiswaResponse{
+		return c.JSON(http.StatusNotFound, responses.DefaultResponse{
 			Status:  http.StatusNotFound,
 			Message: "Error",
 			Data:    &echo.Map{"data": "Mahasiswa with specified ID not found"},
 		})
 	}
 
-	return c.JSON(http.StatusOK, responses.MahasiswaResponse{
+	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
 		Data:    &echo.Map{"data": "Mahasiswa with specified ID successfully deleted"},
