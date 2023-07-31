@@ -13,7 +13,7 @@ type Content struct {
 }
 
 type Pengumuman struct {
-	Id        primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty" validate:"required"`
+	Id        primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
 	Jenis     string             `bson:"jenis,omitempty" json:"jenis,omitempty" validate:"required"`
 	Announcer Announcer          `bson:"announcer,omitempty" json:"announcer,omitempty" validate:"required"`
 	Content   Content            `bson:"content,omitempty" json:"content,omitempty" validate:"required"`
