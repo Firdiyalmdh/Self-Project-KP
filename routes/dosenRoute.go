@@ -7,9 +7,9 @@ import (
 )
 
 func DosenRouter(e *echo.Echo) {
-	e.GET("/api/dosen", controllers.GetAllDsn)
-	e.GET("/api/dosen/:id", controllers.GetOneDsn)
-	e.POST("/api/dosen", controllers.CreateDsn)
-	e.PUT("/api/dosen/:id", controllers.EditADsn)
-	e.DELETE("/api/dosen/:id", controllers.DeleteDsn)
+	e.GET("/api/dosen", controllers.GetAllDosen)
+	e.GET("/api/dosen/:id", controllers.GetDosen)
+	e.POST("/api/dosen", controllers.CreateDosen)
+	e.PUT("/api/dosen/:id", controllers.UpdateDosen)
+	e.DELETE("/api/dosen/:id", controllers.DeleteDosen)
 }

@@ -14,17 +14,17 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var pmhCollection *mongo.Collection = configs.GetCollection(configs.DB, "permohonan")
+var permohonanCollection *mongo.Collection = configs.GetCollection(configs.DB, "permohonan")
 
-func GetOnePmh(c echo.Context) error {
+func GetPermohonan(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	id := c.Param("id")
-	var pmh models.Permohonan
+	var permohonan models.Permohonan
 	defer cancel()
 
 	objId, _ := primitive.ObjectIDFromHex(id)
 
-	err := pmhCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&pmh)
+	err := permohonanCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&permohonan)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
@@ -37,16 +37,23 @@ func GetOnePmh(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
-		Data:    &echo.Map{"data": pmh},
+		Data:    &echo.Map{"data": permohonan},
 	})
 }
 
-func GetAllPmh(c echo.Context) error {
+func GetAllPermohonan(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	var allPmh []models.Permohonan
+	nama := c.QueryParam("nama")
+	var allPermohonan []models.Permohonan
 	defer cancel()
 
-	results, err := pmhCollection.Find(ctx, bson.M{})
+	filter := bson.M{}
+
+	if nama != "" {
+		filter["pemohon.nama"] = nama
+	}
+
+	results, err := permohonanCollection.Find(ctx, filter)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
@@ -55,36 +62,34 @@ func GetAllPmh(c echo.Context) error {
 			Data:    &echo.Map{"data": err.Error()},
 		})
 	}
-
 	defer results.Close(ctx)
 	for results.Next(ctx) {
-		var pmh models.Permohonan
-		if err := results.Decode(&pmh); err != nil {
+		var permohonan models.Permohonan
+		if err := results.Decode(&permohonan); err != nil {
 			return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 				Status:  http.StatusInternalServerError,
 				Message: "Error",
 				Data:    &echo.Map{"data": err.Error()},
 			})
 		}
-		allPmh = append(allPmh, pmh)
+		allPermohonan = append(allPermohonan, permohonan)
 	}
-
 	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
-		Data:    &echo.Map{"data": allPmh},
+		Data:    &echo.Map{"data": allPermohonan},
 	})
 }
 
-func EditAPmh(c echo.Context) error {
+func UpdatePermohonan(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	id := c.Param("id")
-	var pmh models.Permohonan
+	var permohonan models.Permohonan
 	defer cancel()
 
 	objId, _ := primitive.ObjectIDFromHex(id)
 
-	if err := c.Bind(&pmh); err != nil {
+	if err := c.Bind(&permohonan); err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 			Status:  http.StatusInternalServerError,
 			Message: "Error",
@@ -92,7 +97,7 @@ func EditAPmh(c echo.Context) error {
 		})
 	}
 
-	if validationErr := validate.Struct(&pmh); validationErr != nil {
+	if validationErr := validate.Struct(&permohonan); validationErr != nil {
 		return c.JSON(http.StatusBadRequest, responses.DefaultResponse{
 			Status:  http.StatusBadRequest,
 			Message: "Error",
@@ -101,21 +106,20 @@ func EditAPmh(c echo.Context) error {
 	}
 
 	update := bson.M{
-		"jenis":  pmh.Jenis,
-		"status": pmh.Status,
+		"tipe":   permohonan.Tipe,
+		"status": permohonan.Status,
 		"pemohon": bson.M{
-			"nama":           pmh.Pemohon.Nama,
-			"nomor_pengenal": pmh.Pemohon.Nomor_Pengenal,
+			"nama":           permohonan.Pemohon.Nama,
+			"nomor_pengenal": permohonan.Pemohon.Nomor_Pengenal,
 		},
-		"tujuan": pmh.Tujuan,
 		"berkas": bson.M{
-			"nama_berkas": pmh.Berkas.NamaBerkas,
-			"url_berkas":  pmh.Berkas.URLBerkas,
+			"nama_berkas": permohonan.Berkas.NamaBerkas,
+			"url_berkas":  permohonan.Berkas.URLBerkas,
 		},
-		"tgl_masuk": pmh.TglMasuk,
+		"tgl_masuk": permohonan.TglMasuk,
 	}
 
-	result, err := pmhCollection.UpdateOne(ctx, bson.M{"_id": objId}, bson.M{"$set": update})
+	result, err := permohonanCollection.UpdateOne(ctx, bson.M{"_id": objId}, bson.M{"$set": update})
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
@@ -125,9 +129,9 @@ func EditAPmh(c echo.Context) error {
 		})
 	}
 
-	var updatedPmh models.Permohonan
+	var updatedPermohonan models.Permohonan
 	if result.MatchedCount == 1 {
-		err := pmhCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&updatedPmh)
+		err := permohonanCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&updatedPermohonan)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 				Status:  http.StatusInternalServerError,
@@ -140,16 +144,16 @@ func EditAPmh(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
-		Data:    &echo.Map{"data": updatedPmh},
+		Data:    &echo.Map{"data": updatedPermohonan},
 	})
 }
 
-func CreatePmh(c echo.Context) error {
+func CreatePermohonan(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	var pmh models.Permohonan
+	var permohonan models.Permohonan
 	defer cancel()
 
-	if err := c.Bind(&pmh); err != nil {
+	if err := c.Bind(&permohonan); err != nil {
 		return c.JSON(http.StatusBadRequest, responses.DefaultResponse{
 			Status:  http.StatusBadRequest,
 			Message: "Error",
@@ -157,23 +161,22 @@ func CreatePmh(c echo.Context) error {
 		})
 	}
 
-	newPmh := models.Permohonan{
+	newPermohonan := models.Permohonan{
 		Id:     primitive.NewObjectID(),
-		Jenis:  pmh.Jenis,
-		Status: pmh.Status,
+		Tipe:   permohonan.Tipe,
+		Status: permohonan.Status,
 		Pemohon: models.Pemohon{
-			Nama:           pmh.Pemohon.Nama,
-			Nomor_Pengenal: pmh.Pemohon.Nomor_Pengenal,
+			Nama:           permohonan.Pemohon.Nama,
+			Nomor_Pengenal: permohonan.Pemohon.Nomor_Pengenal,
 		},
-		Tujuan: pmh.Tujuan,
-		Berkas: models.Berkas{
-			NamaBerkas: pmh.Berkas.NamaBerkas,
-			URLBerkas:  pmh.Berkas.URLBerkas,
+		Berkas: models.BerkasPermohonan{
+			NamaBerkas: permohonan.Berkas.NamaBerkas,
+			URLBerkas:  permohonan.Berkas.URLBerkas,
 		},
-		TglMasuk: pmh.TglMasuk,
+		TglMasuk: permohonan.TglMasuk,
 	}
 
-	result, err := pmhCollection.InsertOne(ctx, newPmh)
+	result, err := permohonanCollection.InsertOne(ctx, newPermohonan)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
@@ -190,14 +193,14 @@ func CreatePmh(c echo.Context) error {
 	})
 }
 
-func DeletePmh(c echo.Context) error {
+func DeletePermohonan(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	id := c.Param("id")
 	defer cancel()
 
 	objId, _ := primitive.ObjectIDFromHex(id)
 
-	result, err := pmhCollection.DeleteOne(ctx, bson.M{"_id": objId})
+	result, err := permohonanCollection.DeleteOne(ctx, bson.M{"_id": objId})
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{

@@ -14,19 +14,19 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var pngCollection *mongo.Collection = configs.GetCollection(configs.DB, "pengumuman")
+var pengumumanCollection *mongo.Collection = configs.GetCollection(configs.DB, "pengumuman")
 
 // var validate = validator.New()
 
-func GetOnePng(c echo.Context) error {
+func GetPengumuman(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	id := c.Param("id")
-	var png models.Pengumuman
+	var pengumuman models.Pengumuman
 	defer cancel()
 
 	objId, _ := primitive.ObjectIDFromHex(id)
 
-	err := pngCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&png)
+	err := pengumumanCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&pengumuman)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
@@ -39,16 +39,16 @@ func GetOnePng(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
-		Data:    &echo.Map{"data": png},
+		Data:    &echo.Map{"data": pengumuman},
 	})
 }
 
-func GetAllPng(c echo.Context) error {
+func GetAllPengumuman(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	var allPng []models.Pengumuman
+	var allPengumuman []models.Pengumuman
 	defer cancel()
 
-	results, err := pngCollection.Find(ctx, bson.M{})
+	results, err := pengumumanCollection.Find(ctx, bson.M{})
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
@@ -60,33 +60,33 @@ func GetAllPng(c echo.Context) error {
 
 	defer results.Close(ctx)
 	for results.Next(ctx) {
-		var png models.Pengumuman
-		if err := results.Decode(&png); err != nil {
+		var pengumuman models.Pengumuman
+		if err := results.Decode(&pengumuman); err != nil {
 			return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 				Status:  http.StatusInternalServerError,
 				Message: "Error",
 				Data:    &echo.Map{"data": err.Error()},
 			})
 		}
-		allPng = append(allPng, png)
+		allPengumuman = append(allPengumuman, pengumuman)
 	}
 
 	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
-		Data:    &echo.Map{"data": allPng},
+		Data:    &echo.Map{"data": allPengumuman},
 	})
 }
 
-func EditAPng(c echo.Context) error {
+func UpdatePengumuman(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	id := c.Param("id")
-	var png models.Pengumuman
+	var pengumuman models.Pengumuman
 	defer cancel()
 
 	objId, _ := primitive.ObjectIDFromHex(id)
 
-	if err := c.Bind(&png); err != nil {
+	if err := c.Bind(&pengumuman); err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 			Status:  http.StatusInternalServerError,
 			Message: "Error",
@@ -94,7 +94,7 @@ func EditAPng(c echo.Context) error {
 		})
 	}
 
-	if validationErr := validate.Struct(&png); validationErr != nil {
+	if validationErr := validate.Struct(&pengumuman); validationErr != nil {
 		return c.JSON(http.StatusBadRequest, responses.DefaultResponse{
 			Status:  http.StatusBadRequest,
 			Message: "Error",
@@ -103,18 +103,18 @@ func EditAPng(c echo.Context) error {
 	}
 
 	update := bson.M{
-		"jenis": png.Jenis,
+		"jenis": pengumuman.Jenis,
 		"announcer": bson.M{
-			"nama":           png.Announcer.Nama,
-			"nomor_pengenal": png.Announcer.Nomor_Pengenal,
+			"nama":           pengumuman.Announcer.Nama,
+			"nomor_pengenal": pengumuman.Announcer.Nomor_Pengenal,
 		},
 		"content": bson.M{
-			"tgl":  png.Content.Tgl,
-			"data": png.Content.Data,
+			"tgl":  pengumuman.Content.Tgl,
+			"data": pengumuman.Content.Data,
 		},
 	}
 
-	result, err := pngCollection.UpdateOne(ctx, bson.M{"_id": objId}, bson.M{"$set": update})
+	result, err := pengumumanCollection.UpdateOne(ctx, bson.M{"_id": objId}, bson.M{"$set": update})
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
@@ -124,9 +124,9 @@ func EditAPng(c echo.Context) error {
 		})
 	}
 
-	var updatedPng models.Pengumuman
+	var updatedPengumuman models.Pengumuman
 	if result.MatchedCount == 1 {
-		err := pngCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&updatedPng)
+		err := pengumumanCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&updatedPengumuman)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 				Status:  http.StatusInternalServerError,
@@ -139,16 +139,16 @@ func EditAPng(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
-		Data:    &echo.Map{"data": updatedPng},
+		Data:    &echo.Map{"data": updatedPengumuman},
 	})
 }
 
-func CreatePng(c echo.Context) error {
+func CreatePengumuman(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	var png models.Pengumuman
+	var pengumuman models.Pengumuman
 	defer cancel()
 
-	if err := c.Bind(&png); err != nil {
+	if err := c.Bind(&pengumuman); err != nil {
 		return c.JSON(http.StatusBadRequest, responses.DefaultResponse{
 			Status:  http.StatusBadRequest,
 			Message: "Error",
@@ -156,20 +156,20 @@ func CreatePng(c echo.Context) error {
 		})
 	}
 
-	newPng := models.Pengumuman{
+	newPengumuman := models.Pengumuman{
 		Id:    primitive.NewObjectID(),
-		Jenis: png.Jenis,
+		Jenis: pengumuman.Jenis,
 		Announcer: models.Announcer{
-			Nama:           png.Announcer.Nama,
-			Nomor_Pengenal: png.Announcer.Nomor_Pengenal,
+			Nama:           pengumuman.Announcer.Nama,
+			Nomor_Pengenal: pengumuman.Announcer.Nomor_Pengenal,
 		},
 		Content: models.Content{
-			Tgl:  png.Content.Tgl,
-			Data: png.Content.Data,
+			Tgl:  pengumuman.Content.Tgl,
+			Data: pengumuman.Content.Data,
 		},
 	}
 
-	result, err := pngCollection.InsertOne(ctx, newPng)
+	result, err := pengumumanCollection.InsertOne(ctx, newPengumuman)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
@@ -186,14 +186,14 @@ func CreatePng(c echo.Context) error {
 	})
 }
 
-func DeletePng(c echo.Context) error {
+func DeletePengumuman(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	id := c.Param("id")
 	defer cancel()
 
 	objId, _ := primitive.ObjectIDFromHex(id)
 
-	result, err := pngCollection.DeleteOne(ctx, bson.M{"_id": objId})
+	result, err := pengumumanCollection.DeleteOne(ctx, bson.M{"_id": objId})
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
@@ -207,13 +207,13 @@ func DeletePng(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, responses.DefaultResponse{
 			Status:  http.StatusNotFound,
 			Message: "Error",
-			Data:    &echo.Map{"data": "Pengumuman with specified ID not found"},
+			Data:    &echo.Map{"data": "Pengumuman not found"},
 		})
 	}
 
 	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
-		Data:    &echo.Map{"data": "Pengumuman with specified ID successfully deleted"},
+		Data:    &echo.Map{"data": "Pengumuman deleted"},
 	})
 }

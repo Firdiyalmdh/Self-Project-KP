@@ -7,9 +7,9 @@ import (
 )
 
 func MahasiswaRouter(e *echo.Echo) {
-	e.GET("/api/mahasiswa", controllers.GetAllMhs)
-	e.GET("/api/mahasiswa/:id", controllers.GetOneMhs)
-	e.POST("/api/mahasiswa", controllers.CreateMhs)
-	e.PUT("/api/mahasiswa/:id", controllers.EditAMhs)
-	e.DELETE("/api/mahasiswa/:id", controllers.DeleteMhs)
+	e.GET("/api/mahasiswa", controllers.GetAllMahasiswa)
+	e.GET("/api/mahasiswa/:id", controllers.GetMahasiswa)
+	e.POST("/api/mahasiswa", controllers.CreateMahasiswa)
+	e.PUT("/api/mahasiswa/:id", controllers.UpdateMahasiswa)
+	e.DELETE("/api/mahasiswa/:id", controllers.DeleteMahasiswa)
 }

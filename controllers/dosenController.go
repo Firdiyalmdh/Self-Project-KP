@@ -14,19 +14,19 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var dsnCollection *mongo.Collection = configs.GetCollection(configs.DB, "dosen")
+var dosenCollection *mongo.Collection = configs.GetCollection(configs.DB, "dosen")
 
 // var validate = validator.New()
 
-func GetOneDsn(c echo.Context) error {
+func GetDosen(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	id := c.Param("id")
-	var dsn models.Dosen
+	var dosen models.Dosen
 	defer cancel()
 
 	objId, _ := primitive.ObjectIDFromHex(id)
 
-	err := dsnCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&dsn)
+	err := dosenCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&dosen)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
@@ -39,16 +39,16 @@ func GetOneDsn(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
-		Data:    &echo.Map{"data": dsn},
+		Data:    &echo.Map{"data": dosen},
 	})
 }
 
-func GetAllDsn(c echo.Context) error {
+func GetAllDosen(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	var allDsn []models.Dosen
+	var allDosen []models.Dosen
 	defer cancel()
 
-	results, err := dsnCollection.Find(ctx, bson.M{})
+	results, err := dosenCollection.Find(ctx, bson.M{})
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
@@ -68,25 +68,25 @@ func GetAllDsn(c echo.Context) error {
 				Data:    &echo.Map{"data": err.Error()},
 			})
 		}
-		allDsn = append(allDsn, dsn)
+		allDosen = append(allDosen, dsn)
 	}
 
 	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
-		Data:    &echo.Map{"data": allDsn},
+		Data:    &echo.Map{"data": allDosen},
 	})
 }
 
-func EditADsn(c echo.Context) error {
+func UpdateDosen(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	id := c.Param("id")
-	var dsn models.Dosen
+	var dosen models.Dosen
 	defer cancel()
 
 	objId, _ := primitive.ObjectIDFromHex(id)
 
-	if err := c.Bind(&dsn); err != nil {
+	if err := c.Bind(&dosen); err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 			Status:  http.StatusInternalServerError,
 			Message: "Error",
@@ -94,7 +94,7 @@ func EditADsn(c echo.Context) error {
 		})
 	}
 
-	if validationErr := validate.Struct(&dsn); validationErr != nil {
+	if validationErr := validate.Struct(&dosen); validationErr != nil {
 		return c.JSON(http.StatusBadRequest, responses.DefaultResponse{
 			Status:  http.StatusBadRequest,
 			Message: "Error",
@@ -103,13 +103,13 @@ func EditADsn(c echo.Context) error {
 	}
 
 	update := bson.M{
-		"nama":     dsn.Nama,
-		"nrp":      dsn.NIP,
-		"email":    dsn.Email,
-		"password": dsn.Password,
+		"nama":     dosen.Nama,
+		"nrp":      dosen.NIP,
+		"email":    dosen.Email,
+		"password": dosen.Password,
 	}
 
-	result, err := dsnCollection.UpdateOne(ctx, bson.M{"_id": objId}, bson.M{"$set": update})
+	result, err := dosenCollection.UpdateOne(ctx, bson.M{"_id": objId}, bson.M{"$set": update})
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
@@ -119,9 +119,9 @@ func EditADsn(c echo.Context) error {
 		})
 	}
 
-	var updatedDsn models.Dosen
+	var updatedDosen models.Dosen
 	if result.MatchedCount == 1 {
-		err := dsnCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&updatedDsn)
+		err := dosenCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&updatedDosen)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
 				Status:  http.StatusInternalServerError,
@@ -134,16 +134,16 @@ func EditADsn(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
-		Data:    &echo.Map{"data": updatedDsn},
+		Data:    &echo.Map{"data": updatedDosen},
 	})
 }
 
-func CreateDsn(c echo.Context) error {
+func CreateDosen(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	var dsn models.Dosen
+	var dosen models.Dosen
 	defer cancel()
 
-	if err := c.Bind(&dsn); err != nil {
+	if err := c.Bind(&dosen); err != nil {
 		return c.JSON(http.StatusBadRequest, responses.DefaultResponse{
 			Status:  http.StatusBadRequest,
 			Message: "Error",
@@ -151,15 +151,15 @@ func CreateDsn(c echo.Context) error {
 		})
 	}
 
-	newDsn := models.Dosen{
+	newDosen := models.Dosen{
 		Id:       primitive.NewObjectID(),
-		Nama:     dsn.Nama,
-		NIP:      dsn.NIP,
-		Email:    dsn.Email,
-		Password: dsn.Password,
+		Nama:     dosen.Nama,
+		NIP:      dosen.NIP,
+		Email:    dosen.Email,
+		Password: dosen.Password,
 	}
 
-	result, err := dsnCollection.InsertOne(ctx, newDsn)
+	result, err := dosenCollection.InsertOne(ctx, newDosen)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
@@ -176,14 +176,14 @@ func CreateDsn(c echo.Context) error {
 	})
 }
 
-func DeleteDsn(c echo.Context) error {
+func DeleteDosen(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	id := c.Param("id")
 	defer cancel()
 
 	objId, _ := primitive.ObjectIDFromHex(id)
 
-	result, err := dsnCollection.DeleteOne(ctx, bson.M{"_id": objId})
+	result, err := dosenCollection.DeleteOne(ctx, bson.M{"_id": objId})
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
@@ -197,13 +197,13 @@ func DeleteDsn(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, responses.DefaultResponse{
 			Status:  http.StatusNotFound,
 			Message: "Error",
-			Data:    &echo.Map{"data": "Dosen with specified ID not found"},
+			Data:    &echo.Map{"data": "Dosen ID not found"},
 		})
 	}
 
 	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
-		Data:    &echo.Map{"data": "Dosen with specified ID successfully deleted"},
+		Data:    &echo.Map{"data": "Dosen deleted"},
 	})
 }

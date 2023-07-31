@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func setupMain() *echo.Echo {
+func main() {
 	e := echo.New()
 	e.Use(middleware.CORS())
 	configs.ConnectDB()
@@ -16,10 +16,6 @@ func setupMain() *echo.Echo {
 	routes.DosenRouter(e)
 	routes.PermohonanRouter(e)
 	routes.PengumumanRouter(e)
-	return e
-}
-
-func main() {
-	e := setupMain()
+	routes.PengumpulanRouter(e)
 	e.Logger.Fatal(e.Start(":2500"))
 }

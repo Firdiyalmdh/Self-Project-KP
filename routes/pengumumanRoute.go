@@ -7,9 +7,9 @@ import (
 )
 
 func PengumumanRouter(e *echo.Echo) {
-	e.GET("/api/pengumuman", controllers.GetAllPng)
-	e.GET("/api/pengumuman/:id", controllers.GetOnePng)
-	e.POST("/api/pengumuman", controllers.CreatePng)
-	e.PUT("/api/pengumuman/:id", controllers.EditAPng)
-	e.DELETE("/api/pengumuman/:id", controllers.DeletePng)
+	e.GET("/api/pengumuman", controllers.GetAllPengumuman)
+	e.GET("/api/pengumuman/:id", controllers.GetPengumuman)
+	e.POST("/api/pengumuman", controllers.CreatePengumuman)
+	e.PUT("/api/pengumuman/:id", controllers.UpdatePengumuman)
+	e.DELETE("/api/pengumuman/:id", controllers.DeletePengumuman)
 }

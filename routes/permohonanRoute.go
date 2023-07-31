@@ -7,9 +7,9 @@ import (
 )
 
 func PermohonanRouter(e *echo.Echo) {
-	e.GET("/api/permohonan", controllers.GetAllPmh)
-	e.GET("/api/permohonan/:id", controllers.GetOnePmh)
-	e.POST("/api/permohonan", controllers.CreatePmh)
-	e.PUT("/api/permohonan/:id", controllers.EditAPmh)
-	e.DELETE("/api/permohonan/:id", controllers.DeletePmh)
+	e.GET("/api/permohonan", controllers.GetAllPermohonan)
+	e.GET("/api/permohonan/:id", controllers.GetPermohonan)
+	e.POST("/api/permohonan", controllers.CreatePermohonan)
+	e.PUT("/api/permohonan/:id", controllers.UpdatePermohonan)
+	e.DELETE("/api/permohonan/:id", controllers.DeletePermohonan)
 }
