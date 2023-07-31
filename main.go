@@ -10,11 +10,11 @@ import (
 
 func setupMain() *echo.Echo {
 	e := echo.New()
+	e.Use(middleware.CORS())
 	configs.ConnectDB()
 	routes.MahasiswaRouter(e)
 	routes.DosenRouter(e)
 	routes.PermohonanRouter(e)
-	e.Use(middleware.CORS())
 	return e
 }
 
