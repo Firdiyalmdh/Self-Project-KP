@@ -1,0 +1,494 @@
+{
+	"info": {
+		"_postman_id": "5c636c1a-900d-4abe-b5f6-ce41111eb131",
+		"name": "Self-Project API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24631682"
+	},
+	"item": [
+		{
+			"name": "Dosen",
+			"item": [
+				{
+					"name": "GetAllDsn",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/dosen",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"dosen"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetOneDsn",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/dosen/64c4dddd5ceb5a653a3b1714",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"dosen",
+								"64c4dddd5ceb5a653a3b1714"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditADsn",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nama\": \"Riyanto Sigit, ST., M.Kom., Ph.D\",\n    \"nip\": \"197008111995121001\",\n    \"email\": \"riyanto@pens.ac.id\",\n    \"password\": \"pak riyanto\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2500/api/dosen/64c4dddd5ceb5a653a3b1714",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"dosen",
+								"64c4dddd5ceb5a653a3b1714"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateDsn",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nama\": \"Riyanto Sigit, ST., M.Kom., Ph.D\",\n    \"nip\": \"testestes\",\n    \"email\": \"riyanto@pens.ac.id\",\n    \"password\": \"pak riyanto baru\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2500/api/dosen",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"dosen"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteDsn",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/dosen/64c78adacdb7da6b17b7d2cf",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"dosen",
+								"64c78adacdb7da6b17b7d2cf"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Mahasiswa",
+			"item": [
+				{
+					"name": "GetAllMhs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/mahasiswa",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"mahasiswa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetOneMhs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/mahasiswa/64c4dfa25ceb5a653a3b1717",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"mahasiswa",
+								"64c4dfa25ceb5a653a3b1717"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditAMhs",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nama\": \"Firdiyanti Al Ma'idha\",\n    \"nrp\": \"3220600010\",\n    \"semester\": \"7\",\n    \"email\": \"Firdiyanti@ce.student.pens.ac.id\",\n    \"password\": \"tes api\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2500/api/mahasiswa/64c4dfa25ceb5a653a3b1717",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"mahasiswa",
+								"64c4dfa25ceb5a653a3b1717"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateMhs",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nama\": \"Firdiyanti Al Ma'idha\",\n    \"nrp\": \"firdites\",\n    \"semester\": \"7\",\n    \"email\": \"firdites@ce.student.pens.ac.id\",\n    \"password\": \"firdites\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2500/api/mahasiswa",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"mahasiswa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteMhs",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/mahasiswa/64c7861ca2bd2a5fb6c12c6a",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"mahasiswa",
+								"64c7861ca2bd2a5fb6c12c6a"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Permohonan",
+			"item": [
+				{
+					"name": "GetAllPmh",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/permohonan",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"permohonan"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetOnePmh",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/permohonan/64c7c35726825e58781382ec",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"permohonan",
+								"64c7c35726825e58781382ec"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreatePmh",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tipe\": \"a\",\n    \"status\": \"a\",\n    \"pemohon\": {\n        \"nama\": \"ab\",\n        \"nomor_pengenal\": \"ab\"\n    },\n    \"berkas\": {\n        \"nama_berkas\": \"ab\",\n        \"url_berkas\": \"ab\"\n    },\n    \"tgl_masuk\": \"ab\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2500/api/permohonan",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"permohonan"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditAPmh",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tipe\": \"a\",\n    \"status\": \"a\",\n    \"pemohon\": {\n        \"nama\": \"a\",\n        \"nomor_pengenal\": \"a\"\n    },\n    \"berkas\": {\n        \"nama_berkas\": \"asadsda\",\n        \"url_berkas\": \"a\"\n    },\n    \"tgl_masuk\": \"a\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2500/api/permohonan/64c5335ed64730a40d4557d0",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"permohonan",
+								"64c5335ed64730a40d4557d0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeletePmh",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/permohonan/64c8eab0f631a2a8079d90ee",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"permohonan",
+								"64c8eab0f631a2a8079d90ee"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pengumuman",
+			"item": [
+				{
+					"name": "GetAllPng",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/pengumuman",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"pengumuman"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetOnePng",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/pengumuman/64c770904aba92bae915c2ac",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"pengumuman",
+								"64c770904aba92bae915c2ac"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreatePng",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"jenis\": \"Akademik\",\n    \"announcer\": {\n        \"nama\": \"testestes\",\n        \"nomor_pengenal\": \"testestes\"\n    },\n    \"content\": {\n        \"tgl\": \"31/07/2023\",\n        \"data\": \"Membuat progres pengerjaan KP\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2500/api/pengumuman",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"pengumuman"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditAPng",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"jenis\": \"Akademik\",\n    \"announcer\": {\n        \"nama\": \"testestes\",\n        \"nomor_pengenal\": \"testestes\"\n    },\n    \"content\": {\n        \"tgl\": \"testest\",\n        \"data\": \"Membuat progres pengerjaan KP\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2500/api/pengumuman/64c8eb5cf631a2a8079d90f0",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"pengumuman",
+								"64c8eb5cf631a2a8079d90f0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeletePng",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/pengumuman/64c8eb5cf631a2a8079d90f0",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"pengumuman",
+								"64c8eb5cf631a2a8079d90f0"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
