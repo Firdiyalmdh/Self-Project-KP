@@ -117,6 +117,8 @@ func UpdatePermohonan(c echo.Context) error {
 			"url_berkas":  permohonan.Berkas.URLBerkas,
 		},
 		"tgl_masuk": permohonan.TglMasuk,
+		"tujuan": permohonan.Tujuan,
+		"hasil": permohonan.Hasil,
 	}
 
 	result, err := permohonanCollection.UpdateOne(ctx, bson.M{"_id": objId}, bson.M{"$set": update})
@@ -174,6 +176,8 @@ func CreatePermohonan(c echo.Context) error {
 			URLBerkas:  permohonan.Berkas.URLBerkas,
 		},
 		TglMasuk: permohonan.TglMasuk,
+		Tujuan: permohonan.Tujuan,
+		Hasil: permohonan.Hasil,
 	}
 
 	result, err := permohonanCollection.InsertOne(ctx, newPermohonan)

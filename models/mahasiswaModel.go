@@ -3,10 +3,10 @@ package models
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type Mahasiswa struct {
-	Id       primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
-	Nama     string             `bson:"nama,omitempty" json:"nama,omitempty" validate:"required"`
-	NRP      string             `bson:"nrp,omitempty" json:"nrp,omitempty" validate:"required"`
-	Semester string             `bson:"semester,omitempty" json:"semester,omitempty" validate:"required"`
-	Email    string             `bson:"email,omitempty" json:"email,omitempty" validate:"required"`
-	Password string             `bson:"password,omitempty" json:"password,omitempty" validate:"required"`
+	Id       primitive.ObjectID `bson:"_id" json:"_id"`
+	Nama     string             `bson:"nama" json:"nama"`
+	NRP      string             `bson:"nrp" json:"nrp"`
+	Semester string             `bson:"semester" json:"semester"`
+	Email    string             `bson:"email" json:"email"`
+	Password string             `bson:"password" json:"password"`
 }

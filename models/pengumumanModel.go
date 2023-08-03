@@ -3,18 +3,18 @@ package models
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type Announcer struct {
-	Nama           string `bson:"nama,omitempty" json:"nama,omitempty" validate:"required"`
-	Nomor_Pengenal string `bson:"nomor_pengenal,omitempty" json:"nomor_pengenal,omitempty" validate:"required"`
+	Nama           string `bson:"nama" json:"nama" validate:"required"`
+	Nomor_Pengenal string `bson:"nomor_pengenal" json:"nomor_pengenal" validate:"required"`
 }
 
 type Content struct {
-	Tgl  string `bson:"tgl,omitempty" json:"tgl,omitempty" validate:"required"`
-	Data string `bson:"data,omitempty" json:"data,omitempty" validate:"required"`
+	Tgl  string `bson:"tgl" json:"tgl" validate:"required"`
+	Data string `bson:"data" json:"data" validate:"required"`
 }
 
 type Pengumuman struct {
-	Id        primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
-	Jenis     string             `bson:"jenis,omitempty" json:"jenis,omitempty" validate:"required"`
-	Announcer Announcer          `bson:"announcer,omitempty" json:"announcer,omitempty" validate:"required"`
-	Content   Content            `bson:"content,omitempty" json:"content,omitempty" validate:"required"`
+	Id        primitive.ObjectID `bson:"_id" json:"_id"`
+	Jenis     string             `bson:"jenis" json:"jenis" validate:"required"`
+	Announcer Announcer          `bson:"announcer" json:"announcer" validate:"required"`
+	Content   Content            `bson:"content" json:"content" validate:"required"`
 }
