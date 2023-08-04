@@ -19,6 +19,7 @@ var pengumpulanCollection *mongo.Collection = configs.GetCollection(configs.Conn
 func GetAllPengumpulan(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	nama := c.QueryParam("nama")
+	jenis := c.QueryParam("jenis")
 	var allPengumpulan []models.Pengumpulan
 	defer cancel()
 
@@ -26,6 +27,10 @@ func GetAllPengumpulan(c echo.Context) error {
 
 	if nama != "" {
 		filter["pemohon.nama"] = nama
+	}
+
+	if jenis != "" {
+		filter["jenis"] = jenis
 	}
 
 	results, err := pengumpulanCollection.Find(ctx, filter)

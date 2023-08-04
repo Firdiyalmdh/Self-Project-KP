@@ -52,9 +52,10 @@ func GetAllPermohonan(c echo.Context) error {
 
 	if nama != "" {
 		filter["pemohon.nama"] = nama
-		if tipe != "" {
-			filter["tipe"] = tipe
-		}
+	}
+
+	if tipe != "" {
+		filter["tipe"] = tipe
 	}
 
 	results, err := permohonanCollection.Find(ctx, filter)
@@ -121,8 +122,8 @@ func UpdatePermohonan(c echo.Context) error {
 			"url_berkas":  permohonan.Berkas.URLBerkas,
 		},
 		"tgl_masuk": permohonan.TglMasuk,
-		"tujuan": permohonan.Tujuan,
-		"hasil": permohonan.Hasil,
+		"tujuan":    permohonan.Tujuan,
+		"hasil":     permohonan.Hasil,
 	}
 
 	result, err := permohonanCollection.UpdateOne(ctx, bson.M{"_id": objId}, bson.M{"$set": update})
@@ -180,8 +181,8 @@ func CreatePermohonan(c echo.Context) error {
 			URLBerkas:  permohonan.Berkas.URLBerkas,
 		},
 		TglMasuk: permohonan.TglMasuk,
-		Tujuan: permohonan.Tujuan,
-		Hasil: permohonan.Hasil,
+		Tujuan:   permohonan.Tujuan,
+		Hasil:    permohonan.Hasil,
 	}
 
 	result, err := permohonanCollection.InsertOne(ctx, newPermohonan)
