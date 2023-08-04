@@ -104,7 +104,7 @@ func UpdateDosen(c echo.Context) error {
 
 	update := bson.M{
 		"nama":     dosen.Nama,
-		"nrp":      dosen.NIP,
+		"nip":      dosen.NIP,
 		"email":    dosen.Email,
 		"password": dosen.Password,
 	}

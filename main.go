@@ -12,6 +12,8 @@ func main() {
 	e := echo.New()
 	e.Use(middleware.CORS())
 	configs.ConnectDB()
+	routes.HandlerRouter(e)
+	routes.AdminRouter(e)
 	routes.MahasiswaRouter(e)
 	routes.DosenRouter(e)
 	routes.PermohonanRouter(e)

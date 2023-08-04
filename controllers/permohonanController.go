@@ -67,6 +67,7 @@ func GetAllPermohonan(c echo.Context) error {
 			Data:    &echo.Map{"data": err.Error()},
 		})
 	}
+
 	defer results.Close(ctx)
 	for results.Next(ctx) {
 		var permohonan models.Permohonan
@@ -79,6 +80,7 @@ func GetAllPermohonan(c echo.Context) error {
 		}
 		allPermohonan = append(allPermohonan, permohonan)
 	}
+
 	return c.JSON(http.StatusOK, responses.DefaultResponse{
 		Status:  http.StatusOK,
 		Message: "Success",
