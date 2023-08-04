@@ -44,6 +44,7 @@ func GetPermohonan(c echo.Context) error {
 func GetAllPermohonan(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	nama := c.QueryParam("nama")
+	tipe := c.QueryParam("tipe")
 	var allPermohonan []models.Permohonan
 	defer cancel()
 
@@ -51,6 +52,9 @@ func GetAllPermohonan(c echo.Context) error {
 
 	if nama != "" {
 		filter["pemohon.nama"] = nama
+		if tipe != "" {
+			filter["tipe"] = tipe
+		}
 	}
 
 	results, err := permohonanCollection.Find(ctx, filter)
