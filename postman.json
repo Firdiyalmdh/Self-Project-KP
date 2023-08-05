@@ -63,7 +63,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:2500/api/dosen/64c4dddd5ceb5a653a3b1714",
+							"raw": "localhost:2500/api/dosen/64cca0b9d79c878c56ed18df",
 							"host": [
 								"localhost"
 							],
@@ -71,7 +71,7 @@
 							"path": [
 								"api",
 								"dosen",
-								"64c4dddd5ceb5a653a3b1714"
+								"64cca0b9d79c878c56ed18df"
 							]
 						}
 					},
@@ -297,7 +297,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"tipe\": \"a\",\n    \"status\": \"a\",\n    \"pemohon\": {\n        \"nama\": \"ab\",\n        \"nomor_pengenal\": \"ab\"\n    },\n    \"berkas\": {\n        \"nama_berkas\": \"ab\",\n        \"url_berkas\": \"ab\"\n    },\n    \"tgl_masuk\": \"ab\"\n}",
+							"raw": "{\n    \"tipe\": \"b\",\n    \"status\": \"a\",\n    \"pemohon\": {\n        \"nama\": \"ab\",\n        \"nomor_pengenal\": \"ab\"\n    },\n    \"berkas\": {\n        \"nama_berkas\": \"ab\",\n        \"url_berkas\": \"ab\"\n    },\n    \"tgl_masuk\": \"ab\",\n    \"tujuan\": \"ab\",\n    \"hasil\": \"\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -483,6 +483,127 @@
 								"api",
 								"pengumuman",
 								"64c8eb5cf631a2a8079d90f0"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pengumpulan",
+			"item": [
+				{
+					"name": "GetAllPengumpulan",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/pengumpulan",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"pengumpulan"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetPengumpulan",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/pengumpulan/",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"pengumpulan",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreatePengumpulan",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nama\": \"Firdiyanti\",\n    \"nomor_pengenal\": \"3220600010\",\n    \"jenis\": \"Berkas PA\",\n    \"berkas\": {\n        \"nama_berkas\": \"Proposal SPPA.docx\",\n        \"url_berkas\": \"...\"\n    },\n    \"tanggal\": \"2023-05-16 14:50:20\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2500/api/pengumpulan",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"pengumpulan"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdatePengumpulan",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nama\": \"Firdi\",\n    \"nomor_pengenal\": \"10\",\n    \"berkas\": {\n        \"nama_berkas\": \"Proposal(1).docx\",\n        \"url_berkas\": \"...\"\n    },\n    \"tgl\": \"2023-08-15 20:20:21\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2500/api/pengumpulan/",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"pengumpulan",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeletePengumpulan",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/pengumpulan/",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"pengumpulan",
+								""
 							]
 						}
 					},
