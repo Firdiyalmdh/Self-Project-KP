@@ -105,6 +105,7 @@ func CreatePengumpulan(c echo.Context) error {
 		Id:            primitive.NewObjectID(),
 		Nama:          pengumpulan.Nama,
 		NomorPengenal: pengumpulan.NomorPengenal,
+		Jenis:         pengumpulan.Jenis,
 		Berkas: models.BerkasPengumpulan{
 			NamaBerkas: pengumpulan.Berkas.NamaBerkas,
 			URLBerkas:  pengumpulan.Berkas.URLBerkas,
@@ -156,6 +157,7 @@ func UpdatePengumpulan(c echo.Context) error {
 	update := bson.M{
 		"nama":           pengumpulan.Nama,
 		"nomor_pengenal": pengumpulan.NomorPengenal,
+		"jenis":          pengumpulan.Jenis,
 		"berkas": bson.M{
 			"nama_berkas": pengumpulan.Berkas.NamaBerkas,
 			"url_berkas":  pengumpulan.Berkas.URLBerkas,
