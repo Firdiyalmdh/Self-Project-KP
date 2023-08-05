@@ -518,7 +518,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:2500/api/pengumpulan/",
+							"raw": "localhost:2500/api/pengumpulan/64ce26082ac8f71297d7ffaf",
 							"host": [
 								"localhost"
 							],
@@ -526,7 +526,7 @@
 							"path": [
 								"api",
 								"pengumpulan",
-								""
+								"64ce26082ac8f71297d7ffaf"
 							]
 						}
 					},
@@ -595,7 +595,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:2500/api/pengumpulan/",
+							"raw": "localhost:2500/api/pengumpulan/64ce2500ddb9ff492c9fcb9c",
 							"host": [
 								"localhost"
 							],
@@ -603,7 +603,222 @@
 							"path": [
 								"api",
 								"pengumpulan",
-								""
+								"64ce2500ddb9ff492c9fcb9c"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "GetAllDsn",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/admin/dosen",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"admin",
+								"dosen"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllMhs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/admin/mahasiswa",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"admin",
+								"mahasiswa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllPengumpulan",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/admin/pengumpulan",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"admin",
+								"pengumpulan"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllPermohonan",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/admin/permohonan",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"admin",
+								"permohonan"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdatePermohonan",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tipe\": \"nomor\",\n    \"status\": \"selesai\",\n    \"pemohon\": {\n        \"nama\": \"Firdiyanti Al Ma'idha\",\n        \"nomor_pengenal\": \"64cc6611b34e19a9cfe4f652\"\n    },\n    \"berkas\": {\n        \"nama_berkas\": \"dsagdhsgdhs\",\n        \"url_berkas\": \"https://drive.google.com/drive/folders/1WF9pMx5pM0jK4Z0dWiaKfvrdn643Kdcf\"\n    },\n    \"tgl_masuk\": \"05/08/2023\",\n    \"tujuan\": \"\",\n    \"hasil\": \"2108300821/28121/121\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2500/api/admin/permohonan/64ce191de496cb2475ac09dc",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"admin",
+								"permohonan",
+								"64ce191de496cb2475ac09dc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeletePermohonan",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/admin/permohonan/64ce191de496cb2475ac09dc",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"admin",
+								"permohonan",
+								"64ce191de496cb2475ac09dc"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "firdites@ce.student.pens.ac.id",
+									"type": "text"
+								},
+								{
+									"key": "pass",
+									"value": "firdites",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:2500/api/login",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSession",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/session/64ce36d3d07e28295d3b3527ou",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"session",
+								"64ce36d3d07e28295d3b3527ou"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/logout/64ce36d3d07e28295d3b3527",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"logout",
+								"64ce36d3d07e28295d3b3527"
 							]
 						}
 					},
