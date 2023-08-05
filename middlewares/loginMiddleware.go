@@ -16,6 +16,7 @@ import (
 
 var mahasiswaCollection *mongo.Collection = configs.GetCollection(configs.DB, "mahasiswa")
 var dosenCollection *mongo.Collection = configs.GetCollection(configs.DB, "dosen")
+var adminCollection *mongo.Collection = configs.GetCollection(configs.DB, "admin")
 var sessionCollection *mongo.Collection = configs.GetCollection(configs.DB, "session")
 
 func LoginHandler(c echo.Context) error {
@@ -25,6 +26,7 @@ func LoginHandler(c echo.Context) error {
 	var user models.User
 	var mahasiswa models.Mahasiswa
 	var dosen models.Dosen
+	var admin models.Admin
 	defer cancel()
 
 	filter := bson.M{
@@ -38,10 +40,37 @@ func LoginHandler(c echo.Context) error {
 		err := dosenCollection.FindOne(ctx, filter).Decode(&dosen)
 
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
-				Status:  http.StatusInternalServerError,
-				Message: "Error",
-				Data:    &echo.Map{"data": err.Error()},
+			err := adminCollection.FindOne(ctx, filter).Decode(&admin)
+
+			if err != nil {
+				return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
+					Status:  http.StatusInternalServerError,
+					Message: "Error",
+					Data:    &echo.Map{"data": err.Error()},
+				})
+			}
+
+			user.Id = primitive.NewObjectID()
+			user.IdUser = admin.Id.Hex()
+			user.Email = admin.Email
+			user.Nama = admin.Nama
+			user.NomorPengenal = "#"
+			user.Role = "admin"
+
+			result, err := sessionCollection.InsertOne(ctx, user)
+
+			if err != nil {
+				return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
+					Status:  http.StatusInternalServerError,
+					Message: "Error",
+					Data:    &echo.Map{"data": err.Error()},
+				})
+			}
+
+			return c.JSON(http.StatusOK, responses.DefaultResponse{
+				Status:  http.StatusOK,
+				Message: "DSN",
+				Data:    &echo.Map{"data": result},
 			})
 		}
 
