@@ -110,7 +110,7 @@ func CreatePengumpulan(c echo.Context) error {
 			NamaBerkas: pengumpulan.Berkas.NamaBerkas,
 			URLBerkas:  pengumpulan.Berkas.URLBerkas,
 		},
-		Tgl: pengumpulan.Tgl,
+		Tgl: time.Now().Format("2006-01-02"),
 	}
 
 	result, err := pengumpulanCollection.InsertOne(ctx, newPengumpulan)

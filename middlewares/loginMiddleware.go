@@ -126,12 +126,12 @@ func LoginHandler(c echo.Context) error {
 
 func LogoutHandler(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	id := c.QueryParam("id")
+	id := c.Param("id")
 	defer cancel()
 
 	objId, _ := primitive.ObjectIDFromHex(id)
 
-	result, err := dosenCollection.DeleteOne(ctx, bson.M{"_id": objId})
+	result, err := sessionCollection.DeleteOne(ctx, bson.M{"_id": objId})
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
@@ -159,10 +159,12 @@ func LogoutHandler(c echo.Context) error {
 func GetSession(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	var user models.User
-	id := c.QueryParam("id")
+	id := c.Param("id")
 	defer cancel()
 
-	err := sessionCollection.FindOne(ctx, bson.M{"_id": id}).Decode(&user)
+	objId, _ := primitive.ObjectIDFromHex(id)
+
+	err := sessionCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&user)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
