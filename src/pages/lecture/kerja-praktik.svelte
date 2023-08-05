@@ -1,21 +1,35 @@
 <script>
     import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
-    import {  Heading, P, A } from 'flowbite-svelte'
-  
-    const kp = [
-      {
-        studentname: "Fidiyanti Al Ma'idha",
-        periode: "Genap 2022/2023",
-        company: "PT ABCD",
-        file: "Download",
+    import {  Heading } from 'flowbite-svelte'
+    import { getData } from '../../lib/request';
+    import { onMount } from 'svelte';
+
+    let pengumpulanList = []
+
+    $:getPengumpulan = async () => {
+    getData({
+      endpoint: `/pengumpulan`,
+      // params:{
+      //   jenis : "kp"
+      // },
+      onSuccess: (response) => {
+          pengumpulanList = response.map(data => ({
+            id: data._id,
+            name: data.nama,
+            company: data.berkas.nama_berkas,
+            link: data.berkas.url_berkas
+          }))
       },
-      {
-        studentname: "Firmansyah",
-        periode: "Genap 2022/2023",
-        company: "PT XYZ",
-        file: "Download",
-      },
-    ]
+      onFailed: (response) => {
+          console.log(response);
+          alert(response.data.message)
+      }
+    })
+  }
+
+  onMount(async () => {
+    getPengumpulan()
+  })
   </script>
 <div class="m-5">
     <Heading tag="h2" customSize="text-4xl font-extrabold ">Data Kerja Praktik Mahasiswa</Heading>
@@ -23,18 +37,22 @@
         <TableHead theadClass="text-left">
           <TableHeadCell>No</TableHeadCell>
           <TableHeadCell>Nama Mahasiswa</TableHeadCell>
-          <TableHeadCell>Periode</TableHeadCell>
           <TableHeadCell>Perusahaan</TableHeadCell>
           <TableHeadCell>Bukti Penerimaan</TableHeadCell>
         </TableHead>
         <TableBody tableBodyClass="divide-y">
-          {#each kp as dokumen, index}
+          {#each pengumpulanList as data, index}
           <TableBodyRow class="py-3">
             <TableBodyCell>{ index + 1}.</TableBodyCell>
-            <TableBodyCell>{ dokumen.studentname }</TableBodyCell>
-            <TableBodyCell>{ dokumen.periode }</TableBodyCell>
-            <TableBodyCell>{ dokumen.company}</TableBodyCell>
-            <TableBodyCell>{ dokumen.file ? dokumen.file : "-" }</TableBodyCell>
+            <TableBodyCell>{ data.name }</TableBodyCell>
+            <TableBodyCell>{ data.company}</TableBodyCell>
+            <TableBodyCell>
+              {#if data.link}
+                <a class="underline" href={data.link} target="_blank" rel="noreferrer">Buka dokumen</a>
+              {:else}
+                <p>-</p>
+              {/if}
+              </TableBodyCell>
           </TableBodyRow>
           {/each}
         </TableBody>

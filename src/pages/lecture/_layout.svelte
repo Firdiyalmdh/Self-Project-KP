@@ -1,16 +1,31 @@
 <script>
     import { Sidebar, SidebarGroup, SidebarItem, SidebarWrapper, SidebarDropdownItem, SidebarDropdownWrapper } from 'flowbite-svelte';
-    import { url } from '@roxi/routify';
+    import { url, goto } from '@roxi/routify';
+    import { user } from '../../stores/UserStore';
+    import { deleteData } from '../../lib/request';
+
+    $:logout = async () => {
+        deleteData({
+            endpoint: `/logout/${$user.sessionId}`,
+            onSuccess: () => {
+                user.set(null)
+                $goto("/")
+            },
+            onFailed: () => {}
+        })
+    }
 </script>
 
+{#if $user !== null && $user.role === "dosen"}
 <div class="flex w-full">
-    <Sidebar class="w-1/4 bg-gradient-to-r from-amber-700 via-blue-00 to-yellow-900 h-screen">
+    <Sidebar class="min-w-[25%] bg-gradient-to-r from-amber-700 via-blue-00 to-yellow-900 h-screen">
         <div class="w-100 my-5 flex justify-center items-center">
             <div class="flex">
                 <img src="/images/pens.png" width="70">
                 <img src="/images/hmce.png" width="70">
             </div>
         </div>
+        <p class="text-base flex items-center justify-center mb-3 font-bold text-white leading-normal text-left whitespace-normal">{$user.name }</p>
         <SidebarWrapper divClass="bg-transparent">
             <SidebarGroup>
             <SidebarItem label="Home" href={$url('/lecture/home')} aClass="hover:bg-black/25 flex items-center p-2 text-base font-normal text-white rounded-lg">
@@ -42,7 +57,7 @@
                 <SidebarDropdownItem label="Proyek Akhir" href={$url('/lecture/tugas-akhir')} aClass="flex items-center p-2 pl-11 w-full text-base font-normal text-white rounded-lg transition duration-75 group hover:bg-black/25 dark:text-white dark:hover:bg-gray-700"/>
                 <SidebarDropdownItem label="PKM" href={$url('/lecture/pkm')} aClass="flex items-center p-2 pl-11 w-full text-base font-normal text-white rounded-lg transition duration-75 group hover:bg-black/25 dark:text-white dark:hover:bg-gray-700"/>
             </SidebarDropdownWrapper>
-            <SidebarItem label="Logout" aClass="hover:bg-black/25 flex items-center p-2 text-base font-normal text-white rounded-lg">
+            <SidebarItem on:click={logout} label="Logout" aClass="hover:bg-black/25 flex items-center p-2 text-base font-normal text-white rounded-lg">
                 <svelte:fragment slot="icon">
                 <svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10" > 
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M13 5H1m0 0 4 4M1 5l4-4"/>
@@ -55,3 +70,6 @@
         <slot></slot>
     </main>
 </div>
+{:else}
+    {$goto("/auth/login-lecture")}
+{/if}

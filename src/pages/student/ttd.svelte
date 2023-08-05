@@ -1,33 +1,89 @@
 <script>
     import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
-    import { formatDate } from '../../utils';
+    import { formatDate, getCurrentDate } from '../../utils';
     import ListDosen from '../../components/list-dosen.svelte';
+    import { getData, postData } from '../../lib/request';
+    import { user } from "../../stores/UserStore";
+    import { onMount } from 'svelte';
 
-    const ttd = [
-      {
-        name: "Surat Keterangan",
-        date: "27/07/2023",
+    let permohonanList = []
+    let openToast = false
+    let toastMessage = ""
+    let tujuan = ""
+    let title =""
+    let link =""
+
+    $:getPermohonan = async () => {
+    getData({
+      endpoint: `/permohonan`,
+      params: {
+        "nama": $user.name,
+        "tipe": "ttd"
+      },
+      onSuccess: (response) => {
+          permohonanList = response.map(data => ({
+            id: data._id,
+            name: data.berkas.nama_berkas,
+            lecture: data.tujuan,
+            status: data.status,
+            date: data.tgl_masuk,
+            url: data.berkas.url_berkas,
+            result: data.hasil,
+          }))
+      },
+      onFailed: (response) => {
+          console.log(response);
+          alert(response.data.message)
+      }
+    })
+  }
+
+  $:createPermohonan = async (event) => {
+    const name = event.target[0].value
+    const url = event.target[1].value
+    postData({
+      endpoint: '/permohonan',
+      payload: {
+        tipe: "ttd",
         status: "diproses",
-        file: null,
+        pemohon: {
+            nama: $user.name,
+            nomor_pengenal: $user.id
+        },
+        berkas: {
+            nama_berkas: name,
+            url_berkas: url
+        },
+        tgl_masuk: getCurrentDate(),
+        tujuan,
       },
-      {
-        name: "Surat Rekomendasi",
-        date: "20/07/2023",
-        status: "selesai",
-        file: "Download",
+      onSuccess: () => {
+        openToast = true
+        toastMessage = "berhasil membuat permohonan"
+        getPermohonan()
+        
+        setTimeout(() => {
+          openToast = false
+          toastMessage = ""
+        }, 3000);
       },
-      {
-        name: "Surat Embuh",
-        date: "23/06/2023",
-        status: "ditolak",
-        file: null,
-      },
-    ]
+      onFailed: (response) => {
+        console.log(response);
+        alert(response.data.message)
+      }
+    })
+  }
+
+  onMount(async () => {
+    getPermohonan()
+  })
+  
   </script>
-  <form class="m-10 w-96">   
+  <form class="m-10 w-96" on:submit|preventDefault={createPermohonan}>   
       <div class="my-5">
       <label>Nama Dokumen</label>
         <input 
+          bind:value={title}
           class="h-10 font-thin border border-black rounded-lg w-full text-gray-400 leading-tight focus:outline-1 outline-blue-300 focus:shadow-outline" 
           id="username" 
           type="text" 
@@ -35,11 +91,12 @@
       </div>
       <div class="my-5">
         <label>Nama Dosen yang dituju</label>
-        <ListDosen/>
+        <ListDosen on:dosenSelected={(data) => tujuan = data.detail.dosen}/>
     </div>
     <div class="my-5">
       <label>Unggah Dokumen</label>
       <input 
+      bind:value={link}
       class="h-10 font-thin border border-black rounded-lg w-full text-gray-400 leading-tight focus:outline-1 outline-blue-300 focus:shadow-outline" 
       id="username" 
       type="text" 
@@ -52,18 +109,26 @@
       <TableHead theadClass="text-left">
         <TableHeadCell>No</TableHeadCell>
         <TableHeadCell>Nama Dokumen</TableHeadCell>
+        <TableHeadCell>Nama Dosen yang Dituju</TableHeadCell>
         <TableHeadCell>Tanggal Pengajuan</TableHeadCell>
         <TableHeadCell>Status</TableHeadCell>
         <TableHeadCell>File</TableHeadCell>
       </TableHead>
       <TableBody tableBodyClass="divide-y">
-        {#each ttd as dokumen, index}
+        {#each permohonanList as dokumen, index}
         <TableBodyRow class="py-3">
           <TableBodyCell>{ index + 1}.</TableBodyCell>
           <TableBodyCell>{ dokumen.name }</TableBodyCell>
+          <TableBodyCell>{ dokumen.lecture }</TableBodyCell>
           <TableBodyCell>{ formatDate(dokumen.date) }</TableBodyCell>
           <TableBodyCell>{ dokumen.status }</TableBodyCell>
-          <TableBodyCell>{ dokumen.file ? dokumen.file : "-" }</TableBodyCell>
+          <TableBodyCell>
+            {#if dokumen.result}
+              <a class="underline" href={dokumen.result} target="_blank" rel="noreferrer">Buka dokumen</a>
+            {:else}
+              <p>-</p>
+            {/if}
+          </TableBodyCell>
         </TableBodyRow>
         {/each}
       </TableBody>

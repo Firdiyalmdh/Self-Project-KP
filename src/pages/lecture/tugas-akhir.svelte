@@ -1,25 +1,36 @@
 <script>
-    import { Input, Label, Helper } from 'flowbite-svelte';
     import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
-    import Uploadfile from '../../components/uploadfile.svelte';
-    import { formatDate } from '../../utils';
-    import { Button, Dropdown, DropdownItem, Chevron } from 'flowbite-svelte'
-    import {  Heading, P, A } from 'flowbite-svelte'
-  
-    const kp = [
-      {
-        studentname: "Fidiyanti Al Ma'idha",
-        title: "Smart Odontogram Berbasis Mobile Menggunakan Deep Learning",
-        dosbim: "Riyanto Sigit",
-        file: "Download",
+    import { truncateString } from '../../utils';
+    import {  Heading } from 'flowbite-svelte'
+    import { getData } from '../../lib/request';
+    import { onMount } from 'svelte';
+
+    let pengumpulanList = []
+
+    $:getPengumpulan = async () => {
+    getData({
+      endpoint: `/pengumpulan`,
+      // params:{
+      //   jenis : "pa"
+      // },
+      onSuccess: (response) => {
+          pengumpulanList = response.map(data => ({
+            id: data._id,
+            name: data.nama,
+            title: data.berkas.nama_berkas,
+            link: data.berkas.url_berkas
+          }))
       },
-      {
-        studentname: "Firmansyah",
-        title: "Amour Unit .........",
-        dosbim: "Dewi Mutiara Sari",
-        file: "Download",
-      },
-    ]
+      onFailed: (response) => {
+          console.log(response);
+          alert(response.data.message)
+      }
+    })
+  }
+
+  onMount(async () => {
+    getPengumpulan()
+  })
   </script>
 <div class="m-5">
     <Heading tag="h2" customSize="text-4xl font-extrabold ">Data Proyek Akhir Mahasiswa</Heading>
@@ -28,17 +39,21 @@
           <TableHeadCell>No</TableHeadCell>
           <TableHeadCell>Nama Mahasiswa</TableHeadCell>
           <TableHeadCell>Judul</TableHeadCell>
-          <TableHeadCell>Dosen Pembimbing</TableHeadCell>
           <TableHeadCell>Dokumen PA</TableHeadCell>
         </TableHead>
         <TableBody tableBodyClass="divide-y">
-          {#each kp as dokumen, index}
+          {#each pengumpulanList as data, index}
           <TableBodyRow class="py-3">
             <TableBodyCell>{ index + 1}.</TableBodyCell>
-            <TableBodyCell>{ dokumen.studentname }</TableBodyCell>
-            <TableBodyCell>{ dokumen.title }</TableBodyCell>
-            <TableBodyCell>{ dokumen.dosbim}</TableBodyCell>
-            <TableBodyCell>{ dokumen.file ? dokumen.file : "-" }</TableBodyCell>
+            <TableBodyCell>{ data.name }</TableBodyCell>
+            <TableBodyCell>{ truncateString(data.title, 25) }</TableBodyCell>
+            <TableBodyCell>
+              {#if data.link}
+                <a class="underline" href={data.link} target="_blank" rel="noreferrer">Buka dokumen</a>
+              {:else}
+                <p>-</p>
+              {/if}
+            </TableBodyCell>
           </TableBodyRow>
           {/each}
         </TableBody>
