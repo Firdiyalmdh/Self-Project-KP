@@ -160,7 +160,7 @@ func UpdatePengumpulan(c echo.Context) error {
 			"nama_berkas": pengumpulan.Berkas.NamaBerkas,
 			"url_berkas":  pengumpulan.Berkas.URLBerkas,
 		},
-		"tgl_masuk": pengumpulan.Tgl,
+		"tgl": pengumpulan.Tgl,
 	}
 
 	result, err := pengumpulanCollection.UpdateOne(ctx, bson.M{"_id": objId}, bson.M{"$set": update})
