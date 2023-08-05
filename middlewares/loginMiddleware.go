@@ -45,7 +45,8 @@ func LoginHandler(c echo.Context) error {
 			})
 		}
 
-		user.Id = dosen.Id.Hex()
+		user.Id = primitive.NewObjectID()
+		user.IdUser = dosen.Id.Hex()
 		user.Email = dosen.Email
 		user.Nama = dosen.Nama
 		user.NomorPengenal = dosen.NIP
@@ -69,7 +70,8 @@ func LoginHandler(c echo.Context) error {
 		})
 	}
 
-	user.Id = primitive.NewObjectID().Hex()
+	user.Id = primitive.NewObjectID()
+	user.IdUser = mahasiswa.Id.Hex()
 	user.Nama = mahasiswa.Nama
 	user.Email = mahasiswa.Email
 	user.NomorPengenal = mahasiswa.NRP
@@ -122,5 +124,28 @@ func LogoutHandler(c echo.Context) error {
 		Status:  http.StatusOK,
 		Message: "Success",
 		Data:    &echo.Map{"data": "Session deleted"},
+	})
+}
+
+func GetSession(c echo.Context) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	var user models.User
+	id := c.QueryParam("id")
+	defer cancel()
+
+	err := sessionCollection.FindOne(ctx, bson.M{"_id": id}).Decode(&user)
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.DefaultResponse{
+			Status:  http.StatusInternalServerError,
+			Message: "Error",
+			Data:    &echo.Map{"data": err.Error()},
+		})
+	}
+
+	return c.JSON(http.StatusOK, responses.DefaultResponse{
+		Status:  http.StatusOK,
+		Message: "Success",
+		Data:    &echo.Map{"data": user},
 	})
 }
