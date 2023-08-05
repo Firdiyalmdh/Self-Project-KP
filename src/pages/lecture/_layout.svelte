@@ -16,6 +16,9 @@
     }
 </script>
 
+<svelte:head>
+	<title>CEMIS | Dosen</title>
+</svelte:head>
 {#if $user !== null && $user.role === "dosen"}
 <div class="flex w-full">
     <Sidebar class="min-w-[25%] bg-gradient-to-r from-amber-700 via-blue-00 to-yellow-900 h-screen">

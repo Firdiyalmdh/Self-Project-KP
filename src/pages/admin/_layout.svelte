@@ -16,6 +16,9 @@
     }
 </script>
 
+<svelte:head>
+	<title>CEMIS | Admin</title>
+</svelte:head>
 {#if $user !== null && $user.role === "admin"}
 <div class="flex w-screen">
     <Sidebar class="min-w-[25%] bg-gradient-to-r from-purple-700 via-blue-00 to-purple-900 h-screen">

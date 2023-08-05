@@ -16,6 +16,9 @@
     }
 </script>
 
+<svelte:head>
+	<title>CEMIS | Mahasiswa</title>
+</svelte:head>
 {#if $user !== null}
 <div class="flex w-full">
     <Sidebar class="min-w-[25%] bg-gradient-to-r from-cyan-700 via-blue-00 to-blue-900 h-screen">

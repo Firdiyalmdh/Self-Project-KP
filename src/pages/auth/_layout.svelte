@@ -14,6 +14,9 @@
     }
 </style>
 
+<svelte:head>
+	<title>CEMIS | Login</title>
+</svelte:head>
 {#if $user === null}
 <div class="h-screen flex justify-center items-center bg-login"> 
     <slot></slot>
