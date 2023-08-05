@@ -30,7 +30,7 @@
 
 <style>
     .bg-gambar {
-        background: url("../../../public/images/background.png") no-repeat center center fixed;
+        background: url("../../public/images/background.png") no-repeat center center fixed;
         height: 100vh;
         background-repeat: no-repeat;
         background-position: center center;
