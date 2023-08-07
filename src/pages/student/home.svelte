@@ -2,7 +2,7 @@
     import { user } from "../../stores/UserStore";
 </script>
 
-<div class="m-10 text-xs">
+<div class=" m-10 text-xs">
     <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white w-full mb-4">
     Management and Information System <span class="font-semibold text-blue-600 dark:text-blue-500">
         Computer Engineering</span>*.
