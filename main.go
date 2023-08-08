@@ -17,7 +17,6 @@ func main() {
 	routes.MahasiswaRouter(e)
 	routes.DosenRouter(e)
 	routes.PermohonanRouter(e)
-	routes.PengumumanRouter(e)
 	routes.PengumpulanRouter(e)
 	e.Logger.Fatal(e.Start(":2500"))
 }
