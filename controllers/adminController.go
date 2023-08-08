@@ -14,7 +14,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var adminCollection *mongo.Collection = configs.GetCollection(configs.DB, "dosen")
+var adminCollection *mongo.Collection = configs.GetCollection(configs.DB, "admin")
 
 func GetAllAdmin(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
