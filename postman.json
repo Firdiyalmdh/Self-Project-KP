@@ -744,6 +744,25 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "GetAllAdmin",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2500/api/admin",
+							"host": [
+								"localhost"
+							],
+							"port": "2500",
+							"path": [
+								"api",
+								"admin"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
